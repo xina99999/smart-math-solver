@@ -1,0 +1,109 @@
+{
+  "meta": {
+    "name": "COKB Smart Math Solver",
+    "version": "1.0",
+    "description": "Cơ sở tri thức đối tượng tính toán — mảng kiến thức cho cấp 1 và cấp 2"
+  },
+  "objects": [
+    {
+      "id": "HinhChuNhat",
+      "label_vi": "Hình chữ nhật",
+      "attributes": ["chieu_dai", "chieu_rong", "dien_tich", "chu_vi"],
+      "rules": [
+        {
+          "id": "HCN_DT",
+          "formula_latex": "S = a \\cdot b",
+          "meaning": "Diện tích hình chữ nhật bằng chiều dài nhân chiều rộng"
+        },
+        {
+          "id": "HCN_CV",
+          "formula_latex": "P = 2(a + b)",
+          "meaning": "Chu vi hình chữ nhật"
+        }
+      ]
+    },
+    {
+      "id": "TamGiac",
+      "label_vi": "Tam giác",
+      "attributes": ["canh_day", "chieu_cao", "dien_tich"],
+      "rules": [
+        {
+          "id": "TG_DT",
+          "formula_latex": "S = \\frac{1}{2} \\cdot a \\cdot h",
+          "meaning": "Diện tam giác bằng một nửa tích đáy và chiều cao"
+        }
+      ]
+    },
+    {
+      "id": "HinhVuong",
+      "label_vi": "Hình vuông",
+      "attributes": ["canh", "dien_tich", "chu_vi"],
+      "rules": [
+        {
+          "id": "HV_DT",
+          "formula_latex": "S = a^2",
+          "meaning": "Diện tích hình vuông"
+        },
+        {
+          "id": "HV_CV",
+          "formula_latex": "P = 4a",
+          "meaning": "Chu vi hình vuông"
+        }
+      ]
+    },
+    {
+      "id": "PhanSo",
+      "label_vi": "Phân số",
+      "attributes": ["tu_so", "mau_so", "gia_tri"],
+      "rules": [
+        {
+          "id": "PS_CONG",
+          "formula_latex": "\\frac{a}{b} + \\frac{c}{d} = \\frac{ad + bc}{bd}",
+          "meaning": "Cộng phân số (mẫu chung)"
+        },
+        {
+          "id": "PS_TRU",
+          "formula_latex": "\\frac{a}{b} - \\frac{c}{d} = \\frac{ad - bc}{bd}",
+          "meaning": "Trừ phân số"
+        },
+        {
+          "id": "PS_NHAN",
+          "formula_latex": "\\frac{a}{b} \\cdot \\frac{c}{d} = \\frac{ac}{bd}",
+          "meaning": "Nhân phân số"
+        },
+        {
+          "id": "PS_CHIA",
+          "formula_latex": "\\frac{a}{b} : \\frac{c}{d} = \\frac{a}{b} \\cdot \\frac{d}{c}",
+          "meaning": "Chia phân số"
+        }
+      ]
+    },
+    {
+      "id": "PhuongTrinhBacNhat",
+      "label_vi": "Phương trình bậc nhất một ẩn",
+      "attributes": ["he_so_a", "he_so_b", "nghiem_x"],
+      "rules": [
+        {
+          "id": "PTBN_GIAI",
+          "formula_latex": "ax + b = 0 \\Rightarrow x = -\\frac{b}{a}\\ (a \\neq 0)",
+          "meaning": "Nghiệm phương trình bậc nhất"
+        }
+      ]
+    }
+  ],
+  "inference_logic": {
+    "cap_1": {
+      "style": "truc_quan",
+      "guidance": "Ưu tiên lời giải ngắn, có thể dùng ví dụ số, hình ảnh tưởng tượng, không bắt buộc ký hiệu đại số phức tạp."
+    },
+    "cap_2": {
+      "style": "dai_so",
+      "guidance": "Trình bày theo biến, thay số vào công thức, rút gọn đại số; ghi rõ đơn vị và bước biến đổi."
+    }
+  },
+  "output_contract": {
+    "schema_description": "Chỉ trả về một object JSON duy nhất, không markdown, không tiền tố ```.",
+    "required_fields": ["method", "steps", "result"],
+    "steps_item_fields": ["step_number", "title", "latex", "explanation"]
+  }
+}

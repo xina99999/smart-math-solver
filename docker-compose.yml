@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.0-flash}
+    volumes:
+      - ./backend:/app
+    networks:
+      - math-solver-network
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE: http://localhost:8000
+    ports:
+      - "4173:4173"
+    depends_on:
+      - backend
+    networks:
+      - math-solver-network
+
+networks:
+  math-solver-network:
+    driver: bridge
