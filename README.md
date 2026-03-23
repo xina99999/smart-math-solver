@@ -1,11 +1,18 @@
-# Smart Math Solver (COKB)
+# Smart Programming Diagnosis Tutor
 
-Ứng dụng giải toán cấp 1–2: **tri thức** trong `backend/rules.json` (mô hình đối tượng–thuộc tính–luật), **orchestrator** FastAPI, **bộ suy diễn** Google Gemini. Frontend React hiển thị các bước và công thức bằng KaTeX.
+Hệ thống hỗ trợ giải bài tập lập trình có hướng dẫn từng bước cho sinh viên C/C++:
+
+- Chẩn đoán lỗi logic/thuật toán bằng **Rule-Based Reasoning**.
+- Tạo **Context-Aware Explanations** theo cấu trúc:
+  `Code -> Pattern Matching -> Rule Triggered -> Step Explanation`.
+- So sánh hiệu quả giữa:
+  - Hệ thống tri thức + luật chẩn đoán.
+  - Baseline chỉ dùng LLM (Gemini).
 
 ## Cấu trúc
 
-- `backend/` — FastAPI, đọc `rules.json`, gọi Gemini, trả JSON chuẩn (`method`, `steps`, `result`).
-- `frontend/` — Vite + React + KaTeX, proxy `/api` → backend khi chạy dev.
+- `backend/` — FastAPI + tri thức lỗi (`rules.json`) + bộ suy luận theo luật + baseline LLM.
+- `frontend/` — Vite + React, giao diện nhập bài + mã nguồn và hiển thị từng bước sửa lỗi.
 
 ## Chuẩn bị
 
@@ -53,10 +60,26 @@ Mở trình duyệt tại `http://127.0.0.1:5173`. Đảm bảo backend đang ch
 
 ## API
 
-- `POST /api/solve` — Body JSON: `{ "problem": "...", "grade_level": 1 | 2 }`
+- `POST /api/diagnose`
+  - Body JSON:
+    - `problem_title`: tên bài
+    - `problem_statement`: mô tả đề bài
+    - `source_code`: mã nguồn C/C++
+    - `language`: `c` hoặc `cpp`
+    - `compare_with_llm`: `true|false`
+- `POST /api/solve`: alias tương thích ngược với payload như trên
 - `GET /health` — Kiểm tra dịch vụ
 - `GET /api/rules` — Đường dẫn file `rules.json` (debug)
 
-## Mở rộng tri thức
+## CSDL tri thức lỗi
 
-Chỉnh `backend/rules.json`: thêm `objects`, `attributes`, `rules` và cập nhật `inference_logic` nếu cần phong cách suy diễn khác nhau theo cấp.
+`backend/rules.json` gồm:
+
+- `knowledge_model`: mô hình quan hệ Bài toán-Thuật toán-Cấu trúc dữ liệu-Lỗi-Hướng sửa.
+- `topic_keywords`: ánh xạ đề bài/code sang chủ đề.
+- `diagnostic_rules`: tập luật chẩn đoán lỗi phổ biến:
+  - lỗi vòng lặp vô hạn
+  - lỗi điều kiện biên sai
+  - lỗi đệ quy thiếu base case
+  - lỗi quản lý bộ nhớ
+- `recommended_learning_path`: gợi ý học tập tiếp theo.

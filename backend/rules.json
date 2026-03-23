@@ -1,143 +1,277 @@
 {
   "meta": {
-    "name": "COKB Smart Math Solver",
-    "version": "1.0",
-    "description": "Cơ sở tri thức đối tượng tính toán — mảng kiến thức cho cấp 1 và cấp 2"
+    "name": "Programming Tutor with Context-Aware Explanations",
+    "version": "2.1",
+    "description": "Tri thức chẩn đoán lỗi logic/thuật toán trong C/C++ và hướng dẫn sửa từng bước"
   },
-  "objects": [
+  "knowledge_model": "Bài toán ↔ Thuật toán ↔ Cấu trúc dữ liệu ↔ Lỗi thường gặp ↔ Hướng khắc phục",
+  "topic_keywords": {
+    "Mang": ["mang", "array", "phan tu", "duyet", "a["],
+    "VongLap": ["for", "while", "lap", "loop"],
+    "DeQuy": ["de quy", "recursion", "recursive"],
+    "SapXep": ["sap xep", "sort", "bubble", "selection", "quick"],
+    "ConTroBoNho": ["pointer", "malloc", "new", "delete", "free"]
+  },
+  "diagnostic_rules": [
     {
-      "id": "HinhChuNhat",
-      "label_vi": "Hình chữ nhật",
-      "attributes": ["chieu_dai", "chieu_rong", "dien_tich", "chu_vi"],
-      "rules": [
+      "id": "R_INFINITE_LOOP_WHILE",
+      "error_type": "Vòng lặp vô hạn",
+      "severity": "critical",
+      "why_it_happens": "Biến điều khiển không thay đổi hoặc điều kiện dừng không thể đạt được.",
+      "fix_summary": "Cập nhật biến điều khiển trong thân vòng lặp và xác minh điều kiện thoát.",
+      "detection_patterns": [
         {
-          "id": "HCN_DT",
-          "formula_latex": "S = a \\cdot b",
-          "meaning": "Diện tích hình chữ nhật bằng chiều dài nhân chiều rộng"
+          "regex": "while\\s*\\((true|1)\\)\\s*\\{",
+          "evidence": "Phát hiện while vô hạn: {match}"
         },
         {
-          "id": "HCN_CV",
-          "formula_latex": "P = 2(a + b)",
-          "meaning": "Chu vi hình chữ nhật"
-        }
-      ]
-    },
-    {
-      "id": "TamGiac",
-      "label_vi": "Tam giác",
-      "attributes": ["canh_day", "chieu_cao", "dien_tich"],
-      "rules": [
-        {
-          "id": "TG_DT",
-          "formula_latex": "S = \\frac{1}{2} \\cdot a \\cdot h",
-          "meaning": "Diện tam giác bằng một nửa tích đáy và chiều cao"
-        }
-      ]
-    },
-    {
-      "id": "HinhVuong",
-      "label_vi": "Hình vuông",
-      "attributes": ["canh", "dien_tich", "chu_vi"],
-      "rules": [
-        {
-          "id": "HV_DT",
-          "formula_latex": "S = a^2",
-          "meaning": "Diện tích hình vuông"
-        },
-        {
-          "id": "HV_CV",
-          "formula_latex": "P = 4a",
-          "meaning": "Chu vi hình vuông"
-        }
-      ]
-    },
-    {
-      "id": "PhanSo",
-      "label_vi": "Phân số",
-      "attributes": ["tu_so", "mau_so", "gia_tri"],
-      "rules": [
-        {
-          "id": "PS_CONG",
-          "formula_latex": "\\frac{a}{b} + \\frac{c}{d} = \\frac{ad + bc}{bd}",
-          "meaning": "Cộng phân số (mẫu chung)"
-        },
-        {
-          "id": "PS_TRU",
-          "formula_latex": "\\frac{a}{b} - \\frac{c}{d} = \\frac{ad - bc}{bd}",
-          "meaning": "Trừ phân số"
-        },
-        {
-          "id": "PS_NHAN",
-          "formula_latex": "\\frac{a}{b} \\cdot \\frac{c}{d} = \\frac{ac}{bd}",
-          "meaning": "Nhân phân số"
-        },
-        {
-          "id": "PS_CHIA",
-          "formula_latex": "\\frac{a}{b} : \\frac{c}{d} = \\frac{a}{b} \\cdot \\frac{d}{c}",
-          "meaning": "Chia phân số"
-        }
-      ]
-    },
-    {
-      "id": "PhuongTrinhBacNhat",
-      "label_vi": "Phương trình bậc nhất một ẩn",
-      "attributes": ["he_so_a", "he_so_b", "nghiem_x"],
-      "rules": [
-        {
-          "id": "PTBN_GIAI",
-          "formula_latex": "ax + b = 0 \\Rightarrow x = -\\frac{b}{a}\\ (a \\neq 0)",
-          "meaning": "Nghiệm phương trình bậc nhất"
-        }
-      ]
-    },
-    {
-      "id": "QuadraticEquation",
-      "label_vi": "Phương trình bậc hai một ẩn",
-      "attributes": ["a", "b", "c", "delta", "expr"],
-      "rules": [
-        {
-          "id": "PTBH_TINH_DELTA",
-          "formula_latex": "\\Delta = b^2 - 4ac",
-          "meaning": "Tính biệt thức Delta"
-        },
-        {
-          "id": "PTBH_BIEU_THUC",
-          "formula_latex": "f(x) = ax^2 + bx + c",
-          "meaning": "Biểu thức đại số của phương trình bậc hai"
-        }
-      ]
-    },
-    {
-      "id": "ExpressionMatrix",
-      "label_vi": "Biểu thức đại số cần rút gọn",
-      "attributes": ["expression", "simplified_expression", "factorized_expression"],
-      "rules": [
-        {
-          "id": "BT_RUT_GON",
-          "formula_latex": "f(x) \\rightarrow \\text{simplify}",
-          "meaning": "Rút gọn biểu thức"
-        },
-        {
-          "id": "BT_PHAN_TICH",
-          "formula_latex": "f(x) \\rightarrow A \\cdot B",
-          "meaning": "Phân tích đa thức thành nhân tử"
+          "regex": "while\\s*\\((\\d+)\\)\\s*\\{",
+          "evidence": "Vòng lặp với điều kiện hằng số: {match}"
         }
       ],
-      "inference_logic": {
-        "cap_1": {
-          "style": "truc_quan",
-          "guidance": "Ưu tiên lời giải ngắn, dùng ví dụ số"
+      "guided_fix_steps": [
+        {
+          "title": "Xác định điều kiện dừng",
+          "explanation": "Xác định rõ khi nào bài toán kết thúc, ví dụ: i < n hoặc count > 0."
         },
-        "cap_2": {
-          "style": "dai_so",
-          "guidance": "Trình bày theo biến và biến đổi đại số"
+        {
+          "title": "Cập nhật biến điều khiển",
+          "explanation": "Đảm bảo biến i, j, count... được tăng/giảm mỗi vòng lặp.",
+          "suggested_code": "while (i < n) {\n  // xử lý\n  i++;\n}"
+        },
+        {
+          "title": "Thêm test cho trường hợp biên",
+          "explanation": "Chạy test với n=0, n=1 để chắc chắn vòng lặp dừng đúng lúc."
         }
-      },
-      "output_contract": {
-        "schema_description": "Chỉ trả về một object JSON duy nhất",
-        "required_fields": ["method", "steps", "result"],
-        "steps_item_fields": ["step_number", "title", "latex", "explanation"]
-      }
+      ]
+    },
+    {
+      "id": "R_OFF_BY_ONE_ARRAY",
+      "error_type": "Sai điều kiện biên mảng (off-by-one)",
+      "severity": "high",
+      "why_it_happens": "Dùng <= n thay vì < n khi duyệt mảng có n phần tử hoặc không xử lý trường hợp n=0.",
+      "fix_summary": "Chỉnh lại điều kiện vòng lặp và truy cập chỉ số trong [0, n-1].",
+      "detection_patterns": [
+        {
+          "regex": "for\\s*\\([^;]*i\\s*=\\s*0\\s*;\\s*i\\s*<=\\s*n\\s*;",
+          "evidence": "Vòng lặp có dấu hiệu vượt biên: {match}"
+        },
+        {
+          "regex": "for\\s*\\([^;]*i\\s*=\\s*1\\s*;\\s*i\\s*<=\\s*n\\s*;",
+          "evidence": "Khởi tạo từ 1 và kiểm tra <= n: {match}"
+        },
+        {
+          "regex": "\\[n\\]\\s*;",
+          "evidence": "Khai báo mảng tĩnh có thể không đủ kích thước: {match}"
+        }
+      ],
+      "guided_fix_steps": [
+        {
+          "title": "Hiểu quy tắc chỉ số mảng",
+          "explanation": "Mảng n phần tử có chỉ số hợp lệ từ 0 đến n-1. Truy cập a[n] là lỗi!"
+        },
+        {
+          "title": "Sửa điều kiện vòng lặp",
+          "explanation": "Thay i <= n bằng i < n để tranh truy cập a[n].",
+          "suggested_code": "// SAI:\nfor (int i = 0; i <= n; i++) cout << a[i];\n\n// ĐÚNG:\nfor (int i = 0; i < n; i++) cout << a[i];"
+        },
+        {
+          "title": "Xử lý trường hợp n=0",
+          "explanation": "Kiểm tra if (n <= 0) ngay sau khi đọc n để tránh truy cập a[0]."
+        }
+      ]
+    },
+    {
+      "id": "R_UNINITIALIZED_ARRAY_ACCESS",
+      "error_type": "Truy cập mảng không khởi tạo",
+      "severity": "high",
+      "why_it_happens": "Khởi tạo biến max/min từ a[0] mà không kiểm tra n > 0.",
+      "fix_summary": "Kiểm tra n > 0 trước khi truy cập a[0] hoặc khởi tạo với INT_MIN/INT_MAX.",
+      "detection_patterns": [
+        {
+          "regex": "int\\s+\\w+\\s*=\\s*a\\[0\\]",
+          "evidence": "Khởi tạo từ phần tử mảng mà không kiểm tra: {match}"
+        },
+        {
+          "regex": "\\w+\\s*=\\s*a\\[0\\];\\s*for",
+          "evidence": "Gán a[0] rồi mới vào vòng lặp: {match}"
+        }
+      ],
+      "guided_fix_steps": [
+        {
+          "title": "Kiểm tra điều kiện trước",
+          "explanation": "Luôn kiểm tra if (n > 0) trước khi truy cập a[0]."
+        },
+        {
+          "title": "Sử dụng giá trị khởi tạo an toàn",
+          "explanation": "Khởi tạo max = INT_MIN hoặc min = INT_MAX để tránh lỗi.",
+          "suggested_code": "#include <climits>\nint mx = INT_MIN;\nfor (int i = 0; i < n; i++) {\n  if (a[i] > mx) mx = a[i];\n}"
+        }
+      ]
+    },
+    {
+      "id": "R_RECURSION_NO_BASE_CASE",
+      "error_type": "Đệ quy thiếu điểm dừng",
+      "severity": "critical",
+      "why_it_happens": "Hàm đệ quy gọi lại chính nó mà không có if return cho trường hợp cơ sở.",
+      "fix_summary": "Thêm base case rõ ràng trước khi gọi đệ quy tiếp.",
+      "detection_patterns": [
+        {
+          "regex": "(int|long|double|float)\\s+\\w+\\s*\\([^)]*\\)\\s*\\{[^}]*\\w+\\s*\\([^)]*\\);",
+          "evidence": "Hàm có dấu hiệu đệ quy: {match}"
+        }
+      ],
+      "guided_fix_steps": [
+        {
+          "title": "Xác định base case",
+          "explanation": "Với bài toán đệ quy, cần xác định trường hợp nhỏ nhất để dừng, ví dụ: n==0 hoặc n==1."
+        },
+        {
+          "title": "Đặt base case trước lời gọi đệ quy",
+          "explanation": "Nếu thỏa base case thì return ngay, nếu không mới gọi đệ quy.",
+          "suggested_code": "int factorial(int n) {\n  if (n <= 1) return 1;  // base case\n  return n * factorial(n - 1);\n}"
+        },
+        {
+          "title": "Kiểm tra hướng hội tụ",
+          "explanation": "Mỗi lần gọi đệ quy cần tiến gần đến base case, ví dụ: n-1, n/2."
+        }
+      ]
+    },
+    {
+      "id": "R_MEMORY_LEAK_NEW",
+      "error_type": "Rò rỉ bộ nhớ với new",
+      "severity": "high",
+      "why_it_happens": "Cấp phát bộ nhớ bằng new nhưng không giải phóng bằng delete.",
+      "fix_summary": "Thêm delete/delete[] hoặc dùng smart pointer/std::vector.",
+      "detection_patterns": [
+        {
+          "regex": "new\\s+\\w+(\\[[^\\]]+\\])?",
+          "evidence": "Phát hiện cấp phát động: {match}"
+        }
+      ],
+      "guided_fix_steps": [
+        {
+          "title": "Theo dõi vòng đời con trỏ",
+          "explanation": "Xác định nơi cấp phát và nơi không còn dùng bộ nhớ."
+        },
+        {
+          "title": "Giải phóng bộ nhớ đúng cách",
+          "explanation": "Thêm delete đối với new và delete[] đối với new[].",
+          "suggested_code": "int* a = new int[n];\n// sử dụng a\ndelete[] a;  // giải phóng\na = nullptr;"
+        },
+        {
+          "title": "Ưu tiên cấu trúc an toàn",
+          "explanation": "Dùng std::vector thay vì cấp phát thủ công để tránh rò rỉ bộ nhớ."
+        }
+      ]
     }
+  ],
+  "test_cases": [
+    {
+      "problem_name": "Tìm phần tử lớn nhất trong mảng",
+      "cases": [
+        {
+          "id": "TC_1",
+          "name": "Trường hợp bình thường",
+          "input": "n = 5, a = [3, 7, 2, 9, 1]",
+          "expected_output": "9",
+          "error_to_catch": "Không lỗi"
+        },
+        {
+          "id": "TC_2",
+          "name": "Trường hợp n = 0",
+          "input": "n = 0",
+          "expected_output": "Không có phần tử",
+          "error_to_catch": "Off-by-one, truy cập a[0] không hợp lệ"
+        },
+        {
+          "id": "TC_3",
+          "name": "Trường hợp n = 1",
+          "input": "n = 1, a = [5]",
+          "expected_output": "5",
+          "error_to_catch": "Có thể lỗi if vòng lặp"
+        },
+        {
+          "id": "TC_4",
+          "name": "Mảng với số âm",
+          "input": "n = 3, a = [-5, -2, -10]",
+          "expected_output": "-2",
+          "error_to_catch": "Khởi tạo max = INT_MIN"
+        },
+        {
+          "id": "TC_5",
+          "name": "Mảng lớn n=1000",
+          "input": "n = 1000, a = random",
+          "expected_output": "max value",
+          "error_to_catch": "Tràn bộ đệm nếu dùng a[1000]"
+        }
+      ]
+    },
+    {
+      "problem_name": "Tính giai thừa bằng đệ quy",
+      "cases": [
+        {
+          "id": "TC_1",
+          "name": "Trường hợp bình thường",
+          "input": "n = 5",
+          "expected_output": "120",
+          "error_to_catch": "Không lỗi"
+        },
+        {
+          "id": "TC_2",
+          "name": "Base case n = 0",
+          "input": "n = 0",
+          "expected_output": "1",
+          "error_to_catch": "Thiếu if (n <= 1) return 1"
+        },
+        {
+          "id": "TC_3",
+          "name": "Base case n = 1",
+          "input": "n = 1",
+          "expected_output": "1",
+          "error_to_catch": "Không dừng ở đệ quy"
+        },
+        {
+          "id": "TC_4",
+          "name": "Số âm",
+          "input": "n = -1",
+          "expected_output": "Lỗi",
+          "error_to_catch": "Đệ quy vô hạn"
+        }
+      ]
+    },
+    {
+      "problem_name": "Sắp xếp mảng bubble sort",
+      "cases": [
+        {
+          "id": "TC_1",
+          "name": "Mảng chưa sắp xếp",
+          "input": "n = 4, a = [3, 1, 4, 1]",
+          "expected_output": "[1, 1, 3, 4]",
+          "error_to_catch": "Không lỗi"
+        },
+        {
+          "id": "TC_2",
+          "name": "Mảng đã sắp xếp",
+          "input": "n = 3, a = [1, 2, 3]",
+          "expected_output": "[1, 2, 3]",
+          "error_to_catch": "Vòng lặp không dừng sớm"
+        },
+        {
+          "id": "TC_3",
+          "name": "Mảng đảo ngược",
+          "input": "n = 3, a = [3, 2, 1]",
+          "expected_output": "[1, 2, 3]",
+          "error_to_catch": "Off-by-one trong điều kiện i <= n"
+        }
+      ]
+    }
+  ],
+  "recommended_learning_path": [
+    "✓ Ôn lại điều kiện biên trong for/while và test case biên.",
+    "✓ Luyện tập viết pseudo-code trước khi code để tránh lỗi logic.",
+    "✓ Thực hành debug theo trace biến i, j, n qua từng bước.",
+    "✓ Học RAII/std::vector để giảm lỗi quản lý bộ nhớ C++.",
+    "✓ Kiểm tra input: n > 0, 0 <= i < n, v.v."
   ]
 }
