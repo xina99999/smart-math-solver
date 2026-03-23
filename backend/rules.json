@@ -89,21 +89,55 @@
           "meaning": "Nghiệm phương trình bậc nhất"
         }
       ]
-    }
-  ],
-  "inference_logic": {
-    "cap_1": {
-      "style": "truc_quan",
-      "guidance": "Ưu tiên lời giải ngắn, có thể dùng ví dụ số, hình ảnh tưởng tượng, không bắt buộc ký hiệu đại số phức tạp."
     },
-    "cap_2": {
-      "style": "dai_so",
-      "guidance": "Trình bày theo biến, thay số vào công thức, rút gọn đại số; ghi rõ đơn vị và bước biến đổi."
+    {
+      "id": "QuadraticEquation",
+      "label_vi": "Phương trình bậc hai một ẩn",
+      "attributes": ["a", "b", "c", "delta", "expr"],
+      "rules": [
+        {
+          "id": "PTBH_TINH_DELTA",
+          "formula_latex": "\\Delta = b^2 - 4ac",
+          "meaning": "Tính biệt thức Delta"
+        },
+        {
+          "id": "PTBH_BIEU_THUC",
+          "formula_latex": "f(x) = ax^2 + bx + c",
+          "meaning": "Biểu thức đại số của phương trình bậc hai"
+        }
+      ]
+    },
+    {
+      "id": "ExpressionMatrix",
+      "label_vi": "Biểu thức đại số cần rút gọn",
+      "attributes": ["expression", "simplified_expression", "factorized_expression"],
+      "rules": [
+        {
+          "id": "BT_RUT_GON",
+          "formula_latex": "f(x) \\rightarrow \\text{simplify}",
+          "meaning": "Rút gọn biểu thức"
+        },
+        {
+          "id": "BT_PHAN_TICH",
+          "formula_latex": "f(x) \\rightarrow A \\cdot B",
+          "meaning": "Phân tích đa thức thành nhân tử"
+        }
+      ],
+      "inference_logic": {
+        "cap_1": {
+          "style": "truc_quan",
+          "guidance": "Ưu tiên lời giải ngắn, dùng ví dụ số"
+        },
+        "cap_2": {
+          "style": "dai_so",
+          "guidance": "Trình bày theo biến và biến đổi đại số"
+        }
+      },
+      "output_contract": {
+        "schema_description": "Chỉ trả về một object JSON duy nhất",
+        "required_fields": ["method", "steps", "result"],
+        "steps_item_fields": ["step_number", "title", "latex", "explanation"]
+      }
     }
-  },
-  "output_contract": {
-    "schema_description": "Chỉ trả về một object JSON duy nhất, không markdown, không tiền tố ```.",
-    "required_fields": ["method", "steps", "result"],
-    "steps_item_fields": ["step_number", "title", "latex", "explanation"]
-  }
+  ]
 }
