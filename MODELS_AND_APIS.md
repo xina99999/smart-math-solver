@@ -60,7 +60,7 @@ Prompt template:
 
 Yêu cầu:
 1) Tóm tắt lỗi logic/thuật toán
-2) 3-5 gợi ý sửa lỗi
+2) Ai gợi ý sửa lỗi
 3) Mức tự tin: high/medium/low
 ```
 

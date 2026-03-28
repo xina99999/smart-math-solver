@@ -389,3 +389,115 @@ button.primary:disabled {
   font-weight: 400;
   line-height: 1.4;
 }
+
+/* Enhanced LLM Section Styling */
+.llm-analysis {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  padding: 1rem !important;
+  border-radius: 10px;
+}
+
+.llm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  gap: 1rem;
+}
+
+.llm-header strong {
+  color: #d5a6ff;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.confidence-badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.confidence-high {
+  background: rgba(52, 168, 83, 0.25);
+  color: #81c995;
+  border: 1px solid rgba(52, 168, 83, 0.3);
+}
+
+.confidence-medium {
+  background: rgba(251, 188, 4, 0.15);
+  color: #f9c74f;
+  border: 1px solid rgba(251, 188, 4, 0.2);
+}
+
+.confidence-low {
+  background: rgba(242, 139, 130, 0.15);
+  color: #f5a3a0;
+  border: 1px solid rgba(242, 139, 130, 0.2);
+}
+
+.analysis-text {
+  margin: 0;
+  color: #d8dce0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  border-left: 3px solid rgba(168, 85, 247, 0.4);
+  padding-left: 0.75rem;
+}
+
+.llm-fixes {
+  background: linear-gradient(135deg, rgba(63, 184, 175, 0.08) 0%, rgba(77, 171, 245, 0.08) 100%);
+  border: 1px solid rgba(63, 184, 175, 0.2);
+  padding: 1rem !important;
+  border-radius: 10px;
+}
+
+.llm-fixes strong {
+  color: #5fd3d3;
+  margin-bottom: 0.75rem !important;
+}
+
+.fixes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.fix-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.6rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  border-left: 3px solid rgba(93, 211, 211, 0.4);
+}
+
+.fix-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: rgba(93, 211, 211, 0.25);
+  color: #5fd3d3;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.fix-text {
+  color: #d8dce0;
+  font-size: 0.93rem;
+  line-height: 1.5;
+  flex: 1;
+}

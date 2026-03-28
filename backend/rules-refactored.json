@@ -1,0 +1,317 @@
+{
+  "meta": {
+    "name": "Programming Tutor - Diagnostic Rules (Refactored)",
+    "version": "3.0",
+    "description": "Tri thức chẩn đoán lỗi logic/thuật toán với regex rõ ràng, cấu trúc sạch"
+  },
+  "knowledge_model": "Bài toán ↔ Thuật toán ↔ Cấu trúc dữ liệu ↔ Lỗi thường gặp ↔ Hướng khắc phục",
+  "topic_keywords": {
+    "Mang": ["mang", "array", "phan tu", "duyet", "a["],
+    "VongLap": ["for", "while", "lap", "loop"],
+    "DeQuy": ["de quy", "recursion", "recursive"],
+    "SapXep": ["sap xep", "sort", "bubble", "selection", "quick"],
+    "ConTroBoNho": ["pointer", "malloc", "new", "delete", "free"]
+  },
+  "diagnostic_rules": [
+    {
+      "id": "R_INFINITE_LOOP_WHILE",
+      "severity": "critical",
+      "category": "Loop Control",
+      "error_type": "Vòng lặp vô hạn",
+      "why_it_happens": "Biến điều khiển không thay đổi hoặc điều kiện dừng không thể đạt được.",
+      "fix_summary": "Cập nhật biến điều khiển trong thân vòng lặp và xác minh điều kiện thoát.",
+      "patterns": [
+        {
+          "regex": "while\\s*\\((true|1)\\)\\s*\\{",
+          "name": "Infinite while with true/1",
+          "explanation": "Phát hiện while(true) hoặc while(1) - vòng lặp vô điều kiện",
+          "evidence": "Phát hiện vòng lặp vô hạn: {match}",
+          "severity": "critical",
+          "test_cases": ["while(true) {", "while (1) {"]
+        },
+        {
+          "regex": "while\\s*\\(([^)]*[^<>=!]|[^)]*==\\s*(true|1))[^)]*\\)",
+          "name": "Constant condition while",
+          "explanation": "Phát hiện while với điều kiện hằng số",
+          "evidence": "Vòng lặp với điều kiện hằng số: {match}",
+          "severity": "high",
+          "test_cases": ["while(5)", "while(count)"]
+        }
+      ],
+      "suggested_fix_ref": "INFINITE_LOOP_FIX",
+      "fix_steps": [
+        {
+          "step": 1,
+          "title": "Xác định điều kiện dừng",
+          "explanation": "Xác định rõ khi nào bài toán kết thúc, ví dụ: i < n hoặc count > 0."
+        },
+        {
+          "step": 2,
+          "title": "Cập nhật biến điều khiển",
+          "explanation": "Đảm bảo biến i, j, count... được tăng/giảm mỗi vòng lặp."
+        },
+        {
+          "step": 3,
+          "title": "Thêm test cho trường hợp biên",
+          "explanation": "Chạy test với n=0, n=1 để chắc chắn vòng lặp dừng đúng lúc."
+        }
+      ]
+    },
+    {
+      "id": "R_OFF_BY_ONE_ARRAY",
+      "severity": "high",
+      "category": "Array Access",
+      "error_type": "Sai điều kiện biên mảng (off-by-one)",
+      "why_it_happens": "Dùng <= n thay vì < n khi duyệt mảng có n phần tử hoặc không xử lý trường hợp n=0.",
+      "fix_summary": "Chỉnh lại điều kiện vòng lặp: [0, n-1] là range hợp lệ cho mảng n phần tử.",
+      "patterns": [
+        {
+          "regex": "for\\s*\\([^;]*i\\s*=\\s*0\\s*;\\s*i\\s*<=\\s*n\\s*;",
+          "name": "For loop with i<=n",
+          "explanation": "Phát hiện for loop khởi tạo từ 0 với điều kiện i <= n (sai!)",
+          "evidence": "Vòng lặp off-by-one (i<=n): {match}",
+          "severity": "high",
+          "test_cases": ["for(int i=0; i<=n; i++)", "for (int i = 0; i <= n; i++)"]
+        },
+        {
+          "regex": "for\\s*\\([^;]*i\\s*=\\s*1\\s*;\\s*i\\s*<=\\s*n\\s*;",
+          "name": "For loop with i=1 and i<=n",
+          "explanation": "Khởi tạo từ 1 nhưng so với n - có thể bỏ sót a[0] hoặc truy cập a[n]",
+          "evidence": "Vòng lặp i=1 với i<=n: {match}",
+          "severity": "medium",
+          "test_cases": ["for(int i=1; i<=n; i++)"]
+        },
+        {
+          "regex": "a\\[\\s*n\\s*\\]",
+          "name": "Array access with a[n]",
+          "explanation": "Phát hiện truy cập a[n] - ngoài giới hạn [0, n-1]",
+          "evidence": "Truy cập mảng ngoài giới hạn: {match}",
+          "severity": "high",
+          "test_cases": ["a[n]", "a[ n ]"]
+        }
+      ],
+      "suggested_fix_ref": "OFF_BY_ONE_LOOP",
+      "fix_steps": [
+        {
+          "step": 1,
+          "title": "Hiểu quy tắc chỉ số mảng",
+          "explanation": "Mảng n phần tử có chỉ số hợp lệ từ 0 đến n-1. Truy cập a[n] là lỗi!"
+        },
+        {
+          "step": 2,
+          "title": "Sửa điều kiện vòng lặp",
+          "explanation": "Thay i <= n bằng i < n để tránh truy cập a[n]."
+        },
+        {
+          "step": 3,
+          "title": "Xử lý trường hợp n=0",
+          "explanation": "Kiểm tra if (n <= 0) ngay sau khi đọc n để tránh truy cập a[0]."
+        }
+      ]
+    },
+    {
+      "id": "R_UNINITIALIZED_ARRAY_ACCESS",
+      "severity": "high",
+      "category": "Array Access",
+      "error_type": "Truy cập mảng không khởi tạo",
+      "why_it_happens": "Khởi tạo biến max/min từ a[0] mà không kiểm tra n > 0, gây crash khi n=0.",
+      "fix_summary": "Kiểm tra n > 0 trước khi truy cập a[0] hoặc dùng INT_MIN/INT_MAX.",
+      "patterns": [
+        {
+          "regex": "int\\s+\\w+\\s*=\\s*a\\[\\s*0\\s*\\]",
+          "name": "Variable init from a[0] without check",
+          "explanation": "Khởi tạo từ a[0] mà không có if (n > 0)",
+          "evidence": "Khởi tạo không an toàn: {match}",
+          "severity": "high",
+          "test_cases": ["int mx = a[0];", "int min = a[ 0 ];"]
+        },
+        {
+          "regex": "\\w+\\s*=\\s*a\\[\\s*0\\s*\\];\\s*(for|while)",
+          "name": "Assignment then loop without boundary check",
+          "explanation": "Gán a[0] rồi mới vào vòng lặp - nguy hiểm nếu n=0",
+          "evidence": "Gán a[0] trước vòng lặp: {match}",
+          "severity": "high",
+          "test_cases": ["mx = a[0]; for", "int x = a[0]; while"]
+        }
+      ],
+      "suggested_fix_ref": "ARRAY_SAFE_INIT",
+      "fix_steps": [
+        {
+          "step": 1,
+          "title": "Kiểm tra điều kiện trước",
+          "explanation": "Luôn kiểm tra if (n > 0) trước khi truy cập a[0]."
+        },
+        {
+          "step": 2,
+          "title": "Sử dụng giá trị khởi tạo an toàn",
+          "explanation": "Khởi tạo max = INT_MIN hoặc min = INT_MAX để tránh lỗi."
+        },
+        {
+          "step": 3,
+          "title": "Xử lý kết quả NULL",
+          "explanation": "Kiểm tra if (max == INT_MIN) để biết có phần tử hay không."
+        }
+      ]
+    },
+    {
+      "id": "R_RECURSION_NO_BASE_CASE",
+      "severity": "critical",
+      "category": "Recursion",
+      "error_type": "Đệ quy thiếu điểm dừng (base case)",
+      "why_it_happens": "Hàm đệ quy gọi lại chính nó mà không có if để check điều kiện cơ sở.",
+      "fix_summary": "Thêm base case (if statement) ngay đầu hàm để dừng đệ quy.",
+      "patterns": [
+        {
+          "regex": "(int|long|double|float|void)\\s+\\w+\\s*\\([^)]*\\)\\s*\\{[^}]*\\w+\\s*\\([^)]*\\)",
+          "name": "Recursive function without visible base case",
+          "explanation": "Hàm gọi chính nó mà không có if statement ở đầu",
+          "evidence": "Hàm đệ quy không có base case: {match}",
+          "severity": "critical",
+          "test_cases": ["int fib(int n) { return fib(n-1)", "long fact(int n) { return n * fact"]
+        },
+        {
+          "regex": "\\w+\\s*\\([^)]*\\)\\s*;\\s*\\}",
+          "name": "Recursive call at end without condition",
+          "explanation": "Hàm kết thúc bằng lệnh gọi đệ quy mà không có điều kiện thoát",
+          "evidence": "Gọi đệ quy cuối hàm không có điều kiện: {match}",
+          "severity": "high",
+          "test_cases": ["fib(n-1);}", "fact(n-1); }"]
+        }
+      ],
+      "suggested_fix_ref": "RECURSION_WITH_BASE_CASE",
+      "fix_steps": [
+        {
+          "step": 1,
+          "title": "Xác định base case",
+          "explanation": "Với bài toán đệ quy, cần xác định trường hợp nhỏ nhất để dừng (n==0, n==1)."
+        },
+        {
+          "step": 2,
+          "title": "Đặt base case ngay đầu hàm",
+          "explanation": "Nếu thỏa base case thì return ngay, nếu không mới gọi đệ quy."
+        },
+        {
+          "step": 3,
+          "title": "Kiểm tra hướng hội tụ",
+          "explanation": "Mỗi lần gọi cần tiến gần đến base case (n-1, n/2, v.v.)."
+        }
+      ]
+    },
+    {
+      "id": "R_MEMORY_LEAK_NEW",
+      "severity": "high",
+      "category": "Memory Management",
+      "error_type": "Rò rỉ bộ nhớ với new/delete",
+      "why_it_happens": "Cấp phát bộ nhớ bằng new nhưng quên giải phóng bằng delete/delete[].",
+      "fix_summary": "Thêm delete/delete[] hoặc dùng smart pointer/std::vector.",
+      "patterns": [
+        {
+          "regex": "\\bnew\\s+(int|char|float|double|long|short)\\s*\\[",
+          "name": "Array allocation with new[]",
+          "explanation": "Cấp phát mảng bằng new[] - cần delete[] để giải phóng",
+          "evidence": "Cấp phát mảng động: {match}",
+          "severity": "high",
+          "test_cases": ["new int[n]", "new char[ size ]"]
+        },
+        {
+          "regex": "\\bnew\\s+(int|char|float|double|long|short)\\s*[^\\[]",
+          "name": "Object allocation with new",
+          "explanation": "Cấp phát biến đơn bằng new - cần delete để giải phóng",
+          "evidence": "Cấp phát đối tượng động: {match}",
+          "severity": "medium",
+          "test_cases": ["new int", "new Node()"]
+        }
+      ],
+      "suggested_fix_ref": "MEMORY_VECTOR",
+      "fix_steps": [
+        {
+          "step": 1,
+          "title": "Sử dụng std::vector thay new (KHUYÊN DÙNG)",
+          "explanation": "vector tự động quản lý bộ nhớ - không cần delete."
+        },
+        {
+          "step": 2,
+          "title": "Nếu phải dùng new, hãy ghép cặp new/delete",
+          "explanation": "delete đối với new, delete[] đối với new[]."
+        },
+        {
+          "step": 3,
+          "title": "Đặt con trỏ thành nullptr sau delete",
+          "explanation": "Tránh use-after-free: a = nullptr; sau delete."
+        }
+      ]
+    }
+  ],
+  "test_cases": [
+    {
+      "problem_id": "find_max",
+      "problem_name": "Tìm phần tử lớn nhất trong mảng",
+      "difficulty": "easy",
+      "cases": [
+        {
+          "id": "TC_1",
+          "name": "Normal case n=5",
+          "input": "n=5, a=[3,7,2,9,1]",
+          "expected": "9",
+          "targets": []
+        },
+        {
+          "id": "TC_2",
+          "name": "Boundary n=0",
+          "input": "n=0",
+          "expected": "Error or NO_ELEMENT",
+          "targets": ["R_UNINITIALIZED_ARRAY_ACCESS"]
+        },
+        {
+          "id": "TC_3",
+          "name": "Boundary n=1",
+          "input": "n=1, a=[5]",
+          "expected": "5",
+          "targets": []
+        },
+        {
+          "id": "TC_4",
+          "name": "Negative numbers",
+          "input": "n=3, a=[-5,-2,-10]",
+          "expected": "-2",
+          "targets": []
+        }
+      ]
+    },
+    {
+      "problem_id": "factorial",
+      "problem_name": "Tính giai thừa bằng đệ quy",
+      "difficulty": "medium",
+      "cases": [
+        {
+          "id": "TC_1",
+          "name": "Normal n=5",
+          "input": "n=5",
+          "expected": "120",
+          "targets": []
+        },
+        {
+          "id": "TC_2",
+          "name": "Base case n=0",
+          "input": "n=0",
+          "expected": "1",
+          "targets": ["R_RECURSION_NO_BASE_CASE"]
+        },
+        {
+          "id": "TC_3",
+          "name": "Base case n=1",
+          "input": "n=1",
+          "expected": "1",
+          "targets": []
+        }
+      ]
+    }
+  ],
+  "recommended_learning_path": [
+    "✓ Ôn lại điều kiện biên trong for/while và test case biên.",
+    "✓ Luyện tập viết pseudo-code trước khi code để tránh lỗi logic.",
+    "✓ Thực hành debug theo trace biến i, j, n qua từng bước.",
+    "✓ Học RAII/std::vector để giảm lỗi quản lý bộ nhớ C++.",
+    "✓ Kiểm tra input: n > 0, 0 <= i < n, v.v."
+  ]
+}

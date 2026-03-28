@@ -177,22 +177,31 @@ export default function App() {
             <div className="llm-box">
               <h3>🤖 Phân tích bổ sung (LLM Baseline)</h3>
               <div className="llm-content">
-                <div className="llm-section">
-                  <strong>📝 Phân tích:</strong>
-                  <p>{result.llm_baseline.analysis}</p>
+                <div className="llm-section llm-analysis">
+                  <div className="llm-header">
+                    <strong>📝 Phân tích chính</strong>
+                    <span className={`confidence-badge confidence-${result.llm_baseline.confidence}`}>
+                      {result.llm_baseline.confidence === "high" ? "✓ Tự tin cao" : 
+                       result.llm_baseline.confidence === "medium" ? "~ Tự tin trung bình" : 
+                       "? Tự tin thấp"}
+                    </span>
+                  </div>
+                  <p className="analysis-text">{result.llm_baseline.analysis}</p>
                 </div>
-                <div className="llm-section">
-                  <strong>💪 Độ tự tin:</strong>
-                  <p>{result.llm_baseline.confidence}</p>
-                </div>
-                <div className="llm-section">
-                  <strong>🛠️ Gợi ý sửa:</strong>
-                  <ul>
-                    {result.llm_baseline.suggested_fixes.map((fix, idx) => (
-                      <li key={idx}>✓ {fix}</li>
-                    ))}
-                  </ul>
-                </div>
+
+                {result.llm_baseline.suggested_fixes.length > 0 && (
+                  <div className="llm-section llm-fixes">
+                    <strong>🔧 Các gợi ý sửa lỗi</strong>
+                    <ol className="fixes-list">
+                      {result.llm_baseline.suggested_fixes.map((fix, idx) => (
+                        <li key={idx} className="fix-item">
+                          <span className="fix-number">{idx + 1}</span>
+                          <span className="fix-text">{fix}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                )}
               </div>
             </div>
           )}

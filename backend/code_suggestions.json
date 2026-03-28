@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "name": "Code Suggestions Library",
+    "version": "1.0",
+    "description": "Tập hợp các đoạn code gợi ý để sửa lỗi"
+  },
+  "suggestions": {
+    "INFINITE_LOOP_FIX": {
+      "id": "fix_infinite_loop_basic",
+      "title": "Sửa vòng lặp - Pattern cơ bản",
+      "code": "while (i < n) {\n  // xử lý\n  i++;\n}"
+    },
+    "OFF_BY_ONE_LOOP": {
+      "id": "fix_off_by_one_loop",
+      "title": "Sửa off-by-one - Vòng lặp đúng",
+      "code": "// SAI:\nfor (int i = 0; i <= n; i++) cout << a[i];\n\n// ĐÚNG:\nfor (int i = 0; i < n; i++) cout << a[i];"
+    },
+    "ARRAY_SAFE_INIT": {
+      "id": "fix_array_safe_init",
+      "title": "Khởi tạo mảng an toàn",
+      "code": "#include <climits>\nint mx = INT_MIN;\nfor (int i = 0; i < n; i++) {\n  if (a[i] > mx) mx = a[i];\n}"
+    },
+    "RECURSION_WITH_BASE_CASE": {
+      "id": "fix_recursion_base_case",
+      "title": "Đệ quy với base case",
+      "code": "int factorial(int n) {\n  if (n <= 1) return 1;  // base case\n  return n * factorial(n - 1);\n}"
+    },
+    "FIBONACCI_BASE_CASE": {
+      "id": "fix_fibonacci_base",
+      "title": "Fibonacci với base case",
+      "code": "int fibonacci(int n) {\n  if (n == 0) return 0;\n  if (n == 1) return 1;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}"
+    },
+    "MEMORY_MANUAL_FREE": {
+      "id": "fix_memory_manual",
+      "title": "Giải phóng bộ nhớ - Cách thủ công",
+      "code": "int* a = new int[n];\n// sử dụng a\ndelete[] a;  // giải phóng\na = nullptr;  // tránh use-after-free"
+    },
+    "MEMORY_VECTOR": {
+      "id": "fix_memory_vector",
+      "title": "Giải phóng bộ nhớ - Dùng std::vector (BEST)",
+      "code": "#include <vector>\n\nvector<int> a(n);\nfor (int i = 0; i < n; i++) {\n  cin >> a[i];\n}\n\n// Không cần delete - tự động giải phóng khi ra scope"
+    },
+    "ARRAY_BOUNDS_CHECK": {
+      "id": "fix_array_bounds_check",
+      "title": "Kiểm tra giới hạn mảng",
+      "code": "if (n <= 0) {\n  cout << \"Lỗi: n phải > 0\" << endl;\n  return 1;\n}\n\nint a[1000];\nfor (int i = 0; i < n; i++) {\n  cin >> a[i];\n}"
+    },
+    "BUBBLE_SORT_CORRECT": {
+      "id": "fix_bubble_sort",
+      "title": "Bubble sort đúng",
+      "code": "for (int i = 0; i < n - 1; i++) {\n  for (int j = 0; j < n - 1 - i; j++) {\n    if (a[j] > a[j + 1]) {\n      swap(a[j], a[j + 1]);\n    }\n  }\n}"
+    },
+    "BINARY_SEARCH_CORRECT": {
+      "id": "fix_binary_search",
+      "title": "Binary search đúng",
+      "code": "int left = 0, right = n - 1;\nwhile (left <= right) {\n  int mid = (left + right) / 2;\n  if (a[mid] == x) return mid;\n  else if (a[mid] < x) left = mid + 1;\n  else right = mid - 1;\n}\nreturn -1;  // không tìm thấy"
+    }
+  }
+}
